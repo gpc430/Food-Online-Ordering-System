@@ -1,0 +1,22 @@
+{% extends 'shop/basic.html' %}
+{% block title%} 订单查询 - 羊羊美食餐饮{% endblock %}
+{% block body %}
+<div class="container">
+    {{response}}
+    <div class="col my-4">
+
+        <h2>订单 Id 支付状态 {{response.ORDERID}}</h2>
+        {% if response.RESPCODE == '01' %}
+        下单成功
+        {% else %}
+        下单失败
+        {% endif%}
+
+    </div>
+
+</div>
+{% endblock %}
+{% block js %}
+<script>
+</script>
+{% endblock %}

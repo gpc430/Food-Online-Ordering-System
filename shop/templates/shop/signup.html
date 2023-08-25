@@ -1,0 +1,68 @@
+{% extends 'shop/basic.html' %}
+{% block title%} 这里注册{% endblock %}
+{% block body %}
+<center>
+    <div class="container mt-3 " xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+        <div class="col-md-12 col-lg-6 login-right">
+            <div class="login-header">
+
+                <h3 class="jumbotron-heading"><span id="typed1">新顾客，这里注册</span></h3>
+            </div>
+            <div class="form-group mt-3">
+                <form action="/shop/signup" method="post">
+                    {% csrf_token %}
+                    <div class="text-left my-2">
+                        <label for="username">用户名</label>
+                        <input class="form-control" id="username" name="username" placeholder="输入唯一用户名" type="text">
+                    </div>
+                    <div class="form-group">
+                        <div class="text-left my-2">
+                            <label for="first_name">名</label>
+                            <input class="form-control" id="first_name" name="first_name" placeholder="输入名"
+                                   type="text">
+                        </div>
+                        <div class="form-group">
+                            <div class="text-left my-2">
+                                <label for="last_name">姓</label>
+                                <input class="form-control" id="last_name" name="last_name" placeholder="输入姓"
+                                       type="text">
+                            </div>
+                            <div class="form-group">
+                                <div class="text-left my-2">
+                                    <label for="email1">邮箱</label>
+                                    <input class="form-control" id="email1" name="email1" placeholder="输入email地址"
+                                           type="text">
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="text-left my-2">
+                                        <label for="password1">输入密码</label>
+                                        <input class="form-control" id="password1" name="password1"
+                                               placeholder="输入你的密码"
+                                               type="password">
+                                    </div>
+                                    <form class="form-group">
+                                        <div class="text-left my-2">
+                                            <label for="password2">再次输入密码</label>
+                                            <input class="form-control" id="password2" name="password2"
+                                                   placeholder="再次输入密码"
+                                                   type="password">
+                                        </div>
+                                        <div class="text-right">
+                                            <a class="forgot-link" href="/accounts/login">已经有账户?</a>
+                                        </div>
+                                        <button class="btn btn-primary btn-block btn-lg login-btn" type="submit">注册
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</center>
+
+{% endblock %}

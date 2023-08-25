@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商户支付页面</title>
+</head>
+<body>
+<h1>正在将您重定向到商家...</h1>
+<h1>请不要刷新页面....</h1>
+<form action="https://securegw-stage.paytm.in/theia/processTransaction" method="post" name="paytm">
+    {% for key, value in darshan_dict.items %}
+    <input type="hidden" name="{{key}}" value="{{value}}">
+    {% endfor %}
+
+</form>
+</body>
+<script>
+document.paytm.submit()
+</script>
+</html>

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+          integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+    <title>{% block title%} {% endblock %}</title>
+    <link rel="icon" href="http://127.0.0.1:8000/media/shop/images/logo.png" type="image/x-icon">
+    <style>
+      .popover-header {
+        background-color: #dfd7d7
+      }
+
+      {% block css %} {% endblock %}
+
+
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/shop">羊羊美食餐饮</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/shop">首页 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown" id="categoryList">
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/tracker">订单查询</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/orderView/">购物车</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/about">关于我们</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/contact">联系我们</a>
+            </li>
+        </ul>
+        <form method="get" action="/shop/search" class="form-inline my-2 my-lg-0 mx-3">
+            <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="查找"
+                   aria-label="Search" required>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">查找</button>
+        </form>
+        {% if user.is_authenticated %}
+        <ul class="navbar-nav mr-2">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href='#' id="navbarDropdown" role="button" data-toggle="dropdown">
+                    欢迎 {{request.user}}</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/shop/logout/">退出</a>
+                </div>
+            </li>
+        </ul>
+        {% else %}
+        <!-- Button trigger Login modal -->
+        <button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#loginModal">登入</button>
+
+        <!-- Button trigger Signup modal -->
+        <button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#signupModal">注册</button>
+
+        {% endif %}
+        <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-html="true"
+                data-toggle="popover" title="购物车" data-placement="bottom" data-content="Bottom popover">
+            购物车(<span id="cart">0</span>)
+        </button>
+    </div>
+</nav>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: rgb(111 202 203);">
+                <h5 class="modal-title" id="loginModal1">这里登入</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/shop/login/" method="post">{% csrf_token %}
+                    <div class="text-left my-2">
+                        <b><label for="username">用户名</label></b>
+                        <input class="form-control" id="loginusername" name="loginusername"
+                               placeholder="Enter Your Username" type="text" required pattern="^[a-z]{3,15}$">
+                    </div>
+                    <div class="text-left my-2">
+                        <b><label for="password">密码</label></b>
+                        <input class="form-control" id="loginpassword" name="loginpassword"
+                               placeholder="Enter Your Password" type="password" required data-toggle="password">
+                    </div>
+                    <button type="submit" class="btn btn-success">提交</button>
+                </form>
+                <p class="mb-0 mt-1">还没有账户? <a href="#" data-dismiss="modal" data-toggle="modal"
+                                               data-target="#signupModal">现在注册</a>.</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: rgb(111 202 203);">
+                <h5 class="modal-title" id="signupModal1">这里注册</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/shop/signup/" method="post">{% csrf_token %}
+                    <div class="form-group">
+                        <b><label for="username">用户名</label></b>
+                        <input class="form-control" id="username" name="username" placeholder="输入唯一用户名" type="text"
+                               required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <b><label for="f_name">名：</label></b>
+                            <input type="text" class="form-control" id="f_name" name="f_name" placeholder="名" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <b><label for="l_name">姓:</label></b>
+                            <input type="text" class="form-control" id="l_name" name="l_name" placeholder="姓" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <b><label for="email1">邮箱:</label></b>
+                        <input type="email" class="form-control" id="email1" name="email1" placeholder="输入你的邮箱"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <b><label for="phone">电话号码:</label></b>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon">+86</span>
+                            </div>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="输入电话号码"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="text-left my-2">
+                        <b><label for="password">密码:</label></b>
+                        <input class="form-control" id="password" name="password" placeholder="输入密码" type="password"
+                               required data-toggle="password">
+                    </div>
+                    <div class="text-left my-2">
+                        <b><label for="password1">再次输入密码:</label></b>
+                        <input class="form-control" id="password1" name="password1" placeholder="再次输入密码" type="password"
+                               required data-toggle="password">
+                    </div>
+                    <button type="submit" class="btn btn-success">提交</button>
+                </form>
+                <p class="mb-0 mt-1">已经有一个账户? <a href="#" data-dismiss="modal" data-toggle="modal"
+                                                 data-target="#loginModal">这里登入</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible mb-0" role="alert">
+    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span></button>
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+
+{% block body %} {% endblock %}
+<div class="footer container-fluid bg-dark text-light">
+    <p class="text-center py-2 mb-0">Copyright © 2021 Designed by <a href="http://www.zglg.work" target="_blank"
+                                                                     rel="noopener noreferrer">zhenguo</a></p>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
+{% block js %} {% endblock %}
+</body>
+
+</html>
